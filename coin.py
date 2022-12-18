@@ -10,7 +10,7 @@ class coin(object):
         self.side = random.choice(self.sides)
         self.history.append(self.side)
     def toss(self):
-
+        continue
         
     def getHistory(self):
         return self.history
