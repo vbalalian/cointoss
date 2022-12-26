@@ -50,10 +50,13 @@ NOButton=tk.Button(Frame, text='No', width=10, \
 quitButton=tk.Button(Frame, text='Quit', command=root.destroy, width=5, height=3)
 
 def results():
+    correctAnswers=0
+    for i in range(len(COIN.getHistory())):
+        if COIN.getHistory()[i] == callHistory[i]:
+            correctAnswers+=1
     count1 = str(len(callHistory))
-    count2 = str(len(COIN.getHistory()))
     text1 = 'Out of ' + count1 + ' coinflips:'
-    text2 = 'You called it right ' + count2 + ' times.'
+    text2 = 'You called it right ' + str(correctAnswers) + ' times.'
     Subtitle.config(text=text1)
     resultText=tk.Label(Frame, text=text2, font=('Noto Serif', 14))
     resultText.grid(row=2, column=0, columnspan=2, pady=20)
