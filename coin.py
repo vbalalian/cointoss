@@ -15,19 +15,17 @@ class coin(object):
     def __str__(self):
         return self.side
 root = tk.Tk()
-root.geometry('350x290')
+root.geometry('350x300')
 Frame=tk.Frame(root)
-Frame.pack()
+Frame.pack(pady=10)
 
 COIN = coin()
-coinHistory, callHistory = [], []
+callHistory = []
 
 imagesize=(150, 150)
-with Image.open('/home/vinnieb/cointoss/heads.jpg', 'r')\
-    as loadH:
+with Image.open('/home/vinnieb/cointoss/heads.jpg', 'r') as loadH:
     loadh=loadH.resize(imagesize)
-with Image.open('/home/vinnieb/cointoss/tails.jpg', 'r')\
-    as loadT:
+with Image.open('/home/vinnieb/cointoss/tails.jpg', 'r') as loadT:
     loadt=loadT.resize(imagesize)
 heads=ImageTk.PhotoImage(loadh)
 tails=ImageTk.PhotoImage(loadt)
@@ -45,18 +43,47 @@ yesButton=tk.Button(Frame, text='Yes', width=10, \
     height=5, command=lambda: callSame('Yes'))
 noButton=tk.Button(Frame, text='No', width=10, \
     height=5, command=lambda: callSame('No'))
+YESButton=tk.Button(Frame, text='Yes', width=10, \
+    height=5, command=lambda: playAgain('Yes'))
+NOButton=tk.Button(Frame, text='No', width=10, \
+    height=5, command=lambda: playAgain('No'))
+quitButton=tk.Button(Frame, text='Quit', command=root.destroy, width=5, height=3)
 
+def results():
+    count1 = str(len(callHistory))
+    count2 = str(len(COIN.getHistory()))
+    text1 = 'Out of ' + count1 + ' coinflips:'
+    text2 = 'You called it right ' + count2 + ' times.'
+    Subtitle.config(text=text1)
+    resultText=tk.Label(Frame, text=text2, font=('Noto Serif', 14))
+    resultText.grid(row=2, column=0, columnspan=2, pady=20)
+    quitButton.grid(row=3, column=0, columnspan=2)
+
+def playButtons():
+    Subtitle.config(text='Play again?')
+    YESButton.grid(row=2, column=0, pady=20)
+    NOButton.grid(row=2, column=1, pady=20)
+def playAgain(YN):
+    YESButton.grid_remove()
+    NOButton.grid_remove()
+    if YN=='Yes':
+        open()
+    else:
+        results()
 def callSame(yn):
     yesButton.grid_remove()
     noButton.grid_remove()
     if yn == 'Yes':
-       ### WHERE I LEFT OFF: if yes, find a way to call again(might have to rework functions)
+        face=callHistory[-1]
+        click(face)
     elif yn == 'No':
-       ## restore call (maybe just move specific functions back outside current nested spots)
+        playButtons()
+       
 def click(side):
     callHistory.append(side)
-    headsButton.grid_remove()
-    tailsButton.grid_remove()
+    if headsButton.winfo_ismapped():
+        headsButton.grid_remove()
+        tailsButton.grid_remove()
     Subtitle.config(text='You called '+ side)
     def flipText():
         Subtitle.config(text='Flipping the coin...')
@@ -76,30 +103,24 @@ def click(side):
         if str(side) == str(COIN):
             Subtitle.config(text='Good job! You called it!')
         else:
-            Subtitle.config(text='Oof! Better luck next time...')
+            Subtitle.config(text='Oof! Better luck next time!')
     root.after(3200, compareCall)
     def callAgain():
         Subtitle.config(text='Call ' + side + ' again?')
         image.grid_remove()
         yesButton.grid(row=2, column=0, pady=20)
         noButton.grid(row=2, column=1, pady=20)
-    root.after(4700, callAgain)
+    root.after(5200, callAgain)
 
+def subtitle():
+    Subtitle.config(text='Heads or Tails?')
+    Subtitle.grid(row=1, column=0, columnspan=2)
+def buttons():
+    headsButton.grid(row=2, column=0, pady=20)
+    tailsButton.grid(row=2, column=1, pady=20)
 def open():
-    def subtitle():
-        Subtitle.config(text='Heads or Tails?')
-        Subtitle.grid(row=1, column=0, columnspan=2)
-    def buttons():
-        headsButton.grid(row=2, column=0, pady=20)
-        tailsButton.grid(row=2, column=1, pady=20)
     root.after(750, subtitle)
     root.after(1250, buttons)
-
-#8 compare user's call to result
-#9 play same call?
-#10 if so, start over
-        #11 if not, ask for new call, give choice to quit
-#12 if user quits, display session history
 
 open()
 root.mainloop()
