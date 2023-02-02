@@ -1,6 +1,8 @@
 import random
 import tkinter as tk
 from PIL import Image, ImageTk
+import os
+pwd = os.getcwd()
 
 class coin(object):
     def __init__(self):
@@ -23,9 +25,9 @@ COIN = coin()
 callHistory = []
 
 imagesize=(150, 150)
-with Image.open('/home/vinnieb/cointoss/heads.jpg', 'r') as loadH:
+with Image.open(pwd + '/heads.jpg', 'r') as loadH:
     loadh=loadH.resize(imagesize)
-with Image.open('/home/vinnieb/cointoss/tails.jpg', 'r') as loadT:
+with Image.open(pwd + '/tails.jpg', 'r') as loadT:
     loadt=loadT.resize(imagesize)
 heads=ImageTk.PhotoImage(loadh)
 tails=ImageTk.PhotoImage(loadt)
